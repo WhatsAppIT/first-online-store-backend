@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const { linkRegex } = require('../utils/constants');
 
 const celebrateLogin = celebrate({
   body: Joi.object().keys({
@@ -22,7 +23,30 @@ const celebrateUpdateProfile = celebrate({
   }),
 });
 
+const celebrateCreateBrand = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+  }),
+});
+
+const celebrateCreateType = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+  }),
+});
+
+const celebrateCreateDevice = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+    price: Joi.number().integer().required(),
+    img: Joi.string().required().regex(linkRegex),
+  }),
+});
+
 module.exports = {
+  celebrateCreateDevice,
+  celebrateCreateType,
+  celebrateCreateBrand,
   celebrateLogin,
   celebrateRegistration,
   celebrateUpdateProfile,

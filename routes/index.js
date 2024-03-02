@@ -5,19 +5,21 @@ const typeRouter = require('./typeRouter');
 const userRouter = require('./userRouter');
 const auth = require('../middlewares/auth');
 const { login, registration } = require('../controllers/userController');
-const NotFoundError = require('../errors/NotFoundError');
+const {
+  celebrateLogin,
+  celebrateRegistration,
+} = require('../middlewares/celebrate');
+const pageNotFound = require('../middlewares/pageNotFound');
 
-router.use('/signin', login);
-router.use('/signup', registration);
+router.post('/signin', celebrateLogin, login);
+router.post('/signup', celebrateRegistration, registration);
 
 router.use(auth);
 
 router.use('/users', userRouter);
-//router.use('/type', typeRouter);
-//router.use('/brand', brandRouter);
-//router.use('/device', deviceRouter);
-router.use('*', (req, res, next) =>
-  next(new NotFoundError('Страница не найдена'))
-);
+router.use('/types', typeRouter);
+router.use('/brands', brandRouter);
+router.use('/devices', deviceRouter);
+router.use('*', pageNotFound);
 
 module.exports = router;
